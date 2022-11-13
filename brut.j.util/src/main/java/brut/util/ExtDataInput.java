@@ -17,8 +17,12 @@
 package brut.util;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 public class ExtDataInput extends DataInputDelegate {
+
+    private final static Logger LOGGER = Logger.getLogger(ExtDataInput.class.getName());
+
     public ExtDataInput(InputStream in) {
         this((DataInput) new DataInputStream(in));
     }
@@ -41,6 +45,14 @@ public class ExtDataInput extends DataInputDelegate {
 
     public void skipCheckInt(int expected1, int expected2) throws IOException {
         int got = readInt();
+
+        // ignore wrong magic number in AndroidManifest.xml
+        int wrongMagicNumber = 0x00080000;
+        if (got == wrongMagicNumber) {
+            LOGGER.warning(String.format("wrong magic number 0x%08x in AndroidManifest.xml", wrongMagicNumber));
+            return ;
+        }
+
         if (got != expected1 && got != expected2) {
             throw new IOException(String.format(
                 "Expected: 0x%08x or 0x%08x, got: 0x%08x", expected1, expected2, got));
