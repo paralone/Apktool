@@ -55,6 +55,9 @@ public class StringBlock {
 
         if (styleCount != 0) {
             block.m_styleOffsets = reader.readIntArray(styleCount);
+        } else {
+            // when styleCount equal 0, styleOffset also equal 0
+            stylesOffset = 0;
         }
 
         int size = ((stylesOffset == 0) ? chunkSize : stylesOffset) - stringsOffset;
