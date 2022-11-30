@@ -58,6 +58,11 @@ public class StringBlock {
         } else {
             // when styleCount equal 0, styleOffset also equal 0
             stylesOffset = 0;
+
+            // check stringsOffset
+            if (stringsOffset != (stringCount*4 + 7*4)) {
+                stringsOffset = (stringCount*4 + 7*4);
+            }
         }
 
         int size = ((stylesOffset == 0) ? chunkSize : stylesOffset) - stringsOffset;
